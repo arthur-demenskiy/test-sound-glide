@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add React in One Minute</title>
+    <!-- they have to add this styles -->
+        <link rel="stylesheet" href="style.css"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- they have to add this styles -->
+  </head>
+  <body>
+
+    <!-- We will put our React component inside this div. -->
+    <div id="root"></div>
+
+    <!-- Load React. -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- Load our React component. -->
+    <script src="api.js"></script>
+    <script type="text/babel">
+        
+    function Modal() {
+        const [employe, setEmploye] = React.useState([]);
+        const [isLoading, setIsLoading] = React.useState(false);
+    
+        React.useEffect(() => {
+            console.log("asdasd");
+            setIsLoading(true);
+            apiService.getAllEmployes().then((res) => {
+                res.then
+                if (res.ok) {
+                    console.log(res); //first consume it in console.log
+                }
+            });
+            setIsLoading(false);
+        }, [isLoading])
+        let device;
+        const handleCall = (phoneClient) => {
+            apiService.generateToken()
+            .then(async (data) => {
+                console.log("phone number", phoneClient);
+                device = new Device(data.data.token);
+                await device.connect(
+                {params: {
+                To: phoneClient
+                }});
+            })
+        } 
+    
+        const declineCall = () => {
+            console.log("decline");
+            device.disconnectAll();
+        }
+    
+        return (
+            <div className='wrapper-modal'>
+                <div className="modal">
+                {!isLoading && employe.map((item) => 
+                    <div className='employe' key={item.id}>
+                    <p>{item.department}</p>
+                    <img src={item.image}/>
+                    <p style={{"fontWeight": "bold"}}>{item.name}</p>
+                    <p>{item.position}</p>
+                    <button onClick={() => handleCall(item.phone_number)}>Call {item.name}</button>
+                    <button className="decline" onClick={() => declineCall()}>Decline</button>
+                    </div>
+                )}
+                </div>
+            </div>
+        );
+        }
+    
+    
+    
+            function Button({isOpen, setIsOpen}) {
+            const startCall = () => {
+                console.log(`Modal is ${ isOpen ? 'Closed' : 'Open'}`);
+                setIsOpen(!isOpen);
+            }
+                
+            return (
+                <div>
+                    <img className="img-button" src="./img/button.png" onClick={startCall} />
+                    <button className="call-button" onClick={startCall}>
+                    <div className="flex-button">
+                        <img className="phone" src="./img/phone.png"/>
+                        <p className="button-value">Lets Talk!</p>
+                    </div>
+                    </button>
+                </div>
+            );
+            }
+    
+    
+            function Main() {
+            const [isOpenModal, setIsOpenModal] = React.useState(false);
+    
+            return (
+                <div>
+                    { isOpenModal ? <Modal /> : null }
+                    <Button isOpen={isOpenModal} setIsOpen={setIsOpenModal}/>
+                </div>
+            );
+            }
+    
+            function App() {
+            return (
+            <div className="App">
+                <Main />
+            </div>
+            );
+            }
+    
+            function Root () {
+                return (
+                    <App />
+                );
+            }
+    
+    
+            let domContainer = document.querySelector('#root');
+            ReactDOM.render(<Root />, domContainer);
+    </script>
+
+  </body>
+</html>
